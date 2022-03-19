@@ -7,6 +7,8 @@ import {
   initializeAppDBSchema,
   mySqlConfig,
 } from './config/mysql.config';
+import { ErrorResponse } from './types/error-response.interface';
+import { ResponseErrors } from './types/errors.enum';
 import { UtilsService } from './utils/utils.service';
 
 @Injectable()
@@ -16,8 +18,21 @@ export class AppService implements OnModuleInit {
     private readonly mysql: Mysql,
     private utilsService: UtilsService,
   ) {}
-  getHello(): string {
-    return 'Hello !';
+
+  async getCityById(
+    cityId: number,
+  ): Promise<Record<string, any>[] | ErrorResponse> {
+    const [records, _] = await this.utilsService.exectureQuery(
+      this.mysql,
+      mySqlConfig.database,
+      'SELECT ID, NAME FROM CITY_MASTER WHERE ID=?',
+      [cityId],
+    );
+    if (records.length) {
+      return records;
+    }
+
+    return { code: ResponseErrors.NOT_FOUND, message: 'not found' };
   }
 
   async onModuleInit() {
