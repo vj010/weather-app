@@ -71,6 +71,29 @@ export class AppService implements OnModuleInit {
     };
   }
 
+  async getCityListByCordinates(lat: number, lng: number): Promise<CityInfo[]> {
+    const query = `select ID, NAME, LATITUDE,LONGITUDE
+    from CITY_MASTER 
+    where LATITUDE!='' and LONGITUDE!='' 
+    and ( 6371 * acos( cos( radians(${lat}) ) * cos( radians( LATITUDE ) ) * cos( radians( LONGITUDE ) - radians(${lng}) ) + sin( radians(${lat}) ) * sin( radians( LATITUDE ) ) ) ) <= 10;`;
+    const [records, _] = await this.utilsService.exectureQuery(
+      this.mysql,
+      mySqlConfig.database,
+      query,
+    );
+
+    return (
+      records?.map((element) => {
+        return {
+          id: element.ID,
+          name: element.NAME,
+          lat: element.LATITUDE,
+          lng: element.LONGITUDE,
+        };
+      }) ?? []
+    );
+  }
+
   async onModuleInit() {
     console.log('weather app started');
 
