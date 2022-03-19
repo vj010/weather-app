@@ -53,7 +53,6 @@ export class AppService implements OnModuleInit {
   async getWeatherByCityId(cityId: number): Promise<WeatherInfo> {
     const city: CityInfo = await this.getCityById(cityId);
     const requestUrl = `${weatherApiUrl}?lat=${city.lat}&lon=${city.lng}&appid=${weatherApiKey}`;
-    console.log('requestUrl', requestUrl);
     const weatherData = await this.httpService.get(requestUrl).toPromise();
 
     return {

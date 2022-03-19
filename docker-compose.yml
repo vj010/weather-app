@@ -1,13 +1,24 @@
 version: "3.9"
 services:
+  mysql:
+    image: mysql:8.0.28-oracle
+    container_name: weather-app-db
+    env_file:
+      - "./.env"
+    environment:
+      - MYSQL_ROOT_PASSWORD=weather-app-pass
+    volumes:
+      - weather-app-mysql-vol:/var/lib/mysql:rw
+    networks:
+      - weather-app-network
+
   web:
     container_name: weather-app-web
-    image: weather-app:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
-      - "8080:3000"
-    # volumes:
-    #   - /home/oem/competitive_programming/klarna/weather-app/:/usr/src/weather-app/:rw
-    #   - /usr/src/weather-app/node_modules
+      - "8080:3000"    
     environment:
       - CITY_JSON_FILE_PATH=${CITY_JSON_FILE_PATH:-/usr/src/weather-app/cities.json}
     env_file:
@@ -15,16 +26,8 @@ services:
     networks:
       - weather-app-network
     depends_on:
-      - mysql    
-  mysql:
-    image: mysql:8.0.28-oracle
-    container_name: weather-app-db
-    environment:
-      - MYSQL_ROOT_PASSWORD=weather-app-pass
-    volumes:
-      - weather-app-mysql-vol:/var/lib/mysql:rw
-    networks:
-      - weather-app-network
+      - mysql
+  
 volumes:
   weather-app-mysql-vol:
 networks:
