@@ -5,9 +5,9 @@ services:
     image: weather-app:1.0.0
     ports:
       - "8080:3000"
-    volumes:
-      - /home/oem/competitive_programming/klarna/weather-app/:/usr/src/weather-app/:rw
-      - /usr/src/weather-app/node_modules
+    # volumes:
+    #   - /home/oem/competitive_programming/klarna/weather-app/:/usr/src/weather-app/:rw
+    #   - /usr/src/weather-app/node_modules
     environment:
       - CITY_JSON_FILE_PATH=${CITY_JSON_FILE_PATH:-/usr/src/weather-app/cities.json}
     env_file:
@@ -15,8 +15,7 @@ services:
     networks:
       - weather-app-network
     depends_on:
-      - mysql
-    command: npm run start:dev
+      - mysql    
   mysql:
     image: mysql:8.0.28-oracle
     container_name: weather-app-db
