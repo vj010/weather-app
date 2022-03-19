@@ -8,6 +8,8 @@ services:
     volumes:
       - /home/oem/competitive_programming/klarna/weather-app/:/usr/src/weather-app/:rw
       - /usr/src/weather-app/node_modules
+    environment:
+      - CITY_JSON_FILE_PATH=${CITY_JSON_FILE_PATH:-/usr/src/weather-app/cities.json}
     env_file:
       - "./.env"
     networks:
