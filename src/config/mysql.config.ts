@@ -6,3 +6,8 @@ export const mySqlConfig = {
   database: process.env.MYSQL_DB,
   entities: ['dist/**/*.entity{.ts,.js}'],
 };
+
+export const initializeAppDBSchema =
+  process.env.INITIALIZE_DB?.toLocaleLowerCase() === 'true';
+
+export const cityJsonFilePath = process.env.CITY_JSON_FILE_PATH;

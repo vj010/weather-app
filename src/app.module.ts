@@ -3,6 +3,7 @@ import { NestMysql2Module } from 'mysql2-nestjs';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { mySqlConfig } from './config/mysql.config';
+import { UtilsModule } from './utils/utils.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { mySqlConfig } from './config/mysql.config';
       user: mySqlConfig.username,
       password: mySqlConfig.password,
     }),
+    UtilsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
