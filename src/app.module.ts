@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { NestMysql2Module } from 'mysql2-nestjs';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -14,6 +14,7 @@ import { UtilsModule } from './utils/utils.module';
       password: mySqlConfig.password,
     }),
     UtilsModule,
+    HttpModule,
   ],
   controllers: [AppController],
   providers: [AppService],
