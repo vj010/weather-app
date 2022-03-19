@@ -1,5 +1,6 @@
 import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
 import { AppService } from './app.service';
+import { ParseNumber } from './pipes/parse-number.pipe';
 import { CityInfo } from './types/city-info-interface';
 
 @Controller('/cities')
@@ -20,8 +21,8 @@ export class AppController {
 
   @Get('/')
   async getCityListByCordinates(
-    @Query('lat') lat: number,
-    @Query('lng') lng: number,
+    @Query('lat', ParseNumber) lat: number,
+    @Query('lng', ParseNumber) lng: number,
   ): Promise<CityInfo[]> {
     return this.appService.getCityListByCordinates(lat, lng);
   }
