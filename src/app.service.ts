@@ -1,4 +1,11 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  HttpCode,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+  OnModuleInit,
+} from '@nestjs/common';
 import { readFileSync } from 'fs';
 import { InjectMysql, Mysql } from 'mysql2-nestjs';
 import { CityTableQry } from './config/mysql-startup.queries';
@@ -21,19 +28,27 @@ export class AppService implements OnModuleInit {
 
   async getCityById(
     cityId: number,
-  ): Promise<Record<string, any>[] | ErrorResponse> {
+  ): Promise<Record<string, any> | HttpException> {
     const [records, _] = await this.utilsService.exectureQuery(
       this.mysql,
       mySqlConfig.database,
       'SELECT ID, NAME FROM CITY_MASTER WHERE ID=?',
       [cityId],
     );
-    if (records.length) {
-      return records;
+    if (records?.length) {
+      return records[0];
     }
 
-    return { code: ResponseErrors.NOT_FOUND, message: 'not found' };
+    throw new HttpException(
+      { code: ResponseErrors.NOT_FOUND, message: 'not found' },
+      HttpStatus.NOT_FOUND,
+    );
   }
+
+  // async getCitiesByLatLng(
+  //   lat: number,
+  //   lng: number,
+  // ): Promise<Record<string, any>[] | ErrorResponse> {}
 
   async onModuleInit() {
     console.log('weather app started');
