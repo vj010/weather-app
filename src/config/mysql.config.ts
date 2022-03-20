@@ -10,4 +10,4 @@ export const mySqlConfig = {
 export const initializeAppDBSchema =
   process.env.INITIALIZE_DB?.toLocaleLowerCase() === 'true';
 
-export const cityJsonFilePath = process.env.CITY_JSON_FILE_PATH;
+export const cityJsonFilePath = process.env.CONTAINER_CITY_JSON_FILE_PATH;

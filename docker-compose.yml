@@ -1,20 +1,6 @@
 version: "3.9"
-volumes:
-  weather-app-mysql-vol:
-networks:
-  weather-app-network:
 
-services:
-  mysql:
-    image: mysql:8.0.28-oracle
-    container_name: weather-app-db    
-    environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_PASS}
-    volumes:
-      - weather-app-mysql-vol:/var/lib/mysql:rw
-    networks:
-      - weather-app-network
-
+services:      
   web:
     container_name: weather-app-web
     build:
@@ -23,12 +9,28 @@ services:
     ports:
       - "8080:3000"    
     environment:
-      - CITY_JSON_FILE_PATH=${CITY_JSON_FILE_PATH:-/usr/src/weather-app/cities.json}
+      - CONTAINER_CITY_JSON_FILE_PATH=${CONTAINER_CITY_JSON_FILE_PATH:-/usr/src/weather-app/cities.json}
     env_file:
       - "./.env"
     networks:
       - weather-app-network
-    depends_on:
+    volumes:
+      - type: bind
+        source: ${HOST_CITY_JSON_FILE_PATH:-./cities.json}
+        target : ${CONTAINER_CITY_JSON_FILE_PATH:-/usr/src/weather-app/cities.json}
+    depends_on: 
       - mysql
-  
 
+  mysql:
+    image: mysql:8.0.28-oracle
+    container_name: weather-app-db    
+    volumes:
+      - weather-app-mysql-vol:/var/lib/mysql:rw 
+    networks:
+      - weather-app-network
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASS}      
+volumes:
+  weather-app-mysql-vol:
+networks:
+  weather-app-network:
