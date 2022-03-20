@@ -4,4 +4,4 @@ services:
     volumes:
       - ${LOCAL_HOST_LOCATION}:/usr/src/weather-app/:rw
       - /usr/src/weather-app/node_modules
-    command: npm run start:dev
+    command: npm run ${APP_MODE}
