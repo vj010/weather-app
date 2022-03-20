@@ -32,6 +32,22 @@
 $ npm install
 ```
 
+## Environment Variables
+
+| Environment Variable | Desciption |
+| ------ | ------ |
+| MYSQL_HOST | (string) mysql hostname |
+| MYSQL_USER | (string) mysql user |
+| MYSQL_PASS | (string) mysql password |
+| MYSQL_DB | (string) mysql database name |
+| MYSQL_PORT | (number) mysql port number|
+| INITIALIZE_DB | (boolean) flag to populate the mysql database with city data. To be set true on first run. |
+| LOCAL_HOST_LOCATION | (string, optional) local project directory to map to container for watch mode development |
+| WEATHER_API_KEY | (string) https://openweathermap.org api key|
+| APP_MODE | (string,optional) run this npm script in container |
+| HOST_CITY_JSON_FILE_PATH | (string, mandatory for first run) location of json file containing city data |
+| CONTAINER_CITY_JSON_FILE_PATH | (optional) location of json file containing city data in container |
+
 ## Running the app
 
 ```bash
