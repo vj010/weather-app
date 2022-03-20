@@ -100,7 +100,9 @@ export class AppService implements OnModuleInit {
       return;
     }
 
-    const cityTableCreateResponse = await this.utilsService.exectureQuery(
+    this.mysql.query(`CREATE DATABASE IF NOT EXISTS ${mySqlConfig.database}`);
+
+    await this.utilsService.exectureQuery(
       this.mysql,
       mySqlConfig.database,
       CityTableQry,
@@ -108,7 +110,7 @@ export class AppService implements OnModuleInit {
 
     console.log('populating master table...please wait');
     const cityData = JSON.parse(readFileSync(cityJsonFilePath, 'utf-8'));
-    const cityTablePopulateResponse = await this.utilsService.populateCityTable(
+    await this.utilsService.populateCityTable(
       this.mysql,
       mySqlConfig.database,
       cityData,

@@ -1,12 +1,15 @@
 version: "3.9"
+volumes:
+  weather-app-mysql-vol:
+networks:
+  weather-app-network:
+
 services:
   mysql:
     image: mysql:8.0.28-oracle
-    container_name: weather-app-db
-    env_file:
-      - "./.env"
+    container_name: weather-app-db    
     environment:
-      - MYSQL_ROOT_PASSWORD=weather-app-pass
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASS}
     volumes:
       - weather-app-mysql-vol:/var/lib/mysql:rw
     networks:
@@ -28,8 +31,4 @@ services:
     depends_on:
       - mysql
   
-volumes:
-  weather-app-mysql-vol:
-networks:
-  weather-app-network:
 
