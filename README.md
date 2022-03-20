@@ -43,6 +43,12 @@ $ npm run start:dev
 
 # production mode
 $ npm run start:prod
+
+# to launch a docker-container in production mode
+$ npm run containe:prod
+
+# to launch a docker-container in watch mode
+$ npm run containe:dev
 ```
 
 ## Test
