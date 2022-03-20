@@ -73,8 +73,7 @@ export class AppService implements OnModuleInit {
   async getCityListByCordinates(lat: number, lng: number): Promise<CityInfo[]> {
     const query = `select ID, NAME, LATITUDE,LONGITUDE
     FROM CITY_MASTER 
-    WHERE LATITUDE IS NOT NULL AND LONGITUDE IS NOT NULL
-    AND ( 6371 * ACOS( COS( RADIANS(${lat}) ) * COS( RADIANS( LATITUDE ) ) * COS( RADIANS( LONGITUDE ) - RADIANS(${lng}) ) + SIN( RADIANS(${lat}) ) * SIN( RADIANS( LATITUDE ) ) ) ) <= 10;`;
+    WHERE ( 6371 * ACOS( COS( RADIANS(${lat}) ) * COS( RADIANS( LATITUDE ) ) * COS( RADIANS( LONGITUDE ) - RADIANS(${lng}) ) + SIN( RADIANS(${lat}) ) * SIN( RADIANS( LATITUDE ) ) ) ) <= 10;`;
     const [records, _] = await this.utilsService.exectureQuery(
       this.mysql,
       mySqlConfig.database,
