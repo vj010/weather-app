@@ -19,7 +19,8 @@ services:
         source: ${HOST_CITY_JSON_FILE_PATH:-./cities.json}
         target : ${CONTAINER_CITY_JSON_FILE_PATH:-/usr/src/weather-app/cities.json}
     depends_on: 
-      - mysql
+      mysql: 
+        condition: service_healthy
 
   mysql:
     image: mysql:8.0.28-oracle
@@ -29,7 +30,13 @@ services:
     networks:
       - weather-app-network
     environment:
-      - MYSQL_ROOT_PASSWORD=${MYSQL_PASS}      
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASS}    
+    healthcheck:
+      test: ["CMD", "mysql","-h","localhost","-p${MYSQL_PASS}"]
+      interval: 5s
+      timeout: 30s
+      retries: 5
+      start_period: 5s      
 volumes:
   weather-app-mysql-vol:
 networks:
