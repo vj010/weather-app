@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8080:3000"    
+      - ${APPLICATION_PORT}:3000
     environment:
       - CONTAINER_CITY_JSON_FILE_PATH=${CONTAINER_CITY_JSON_FILE_PATH:-/usr/src/weather-app/cities.json}
     env_file:
