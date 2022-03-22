@@ -47,6 +47,7 @@ $ npm install
 | APP_MODE | (string,optional) run this npm script in container |
 | HOST_CITY_JSON_FILE_PATH | (string, mandatory for first run) location of json file containing city data |
 | CONTAINER_CITY_JSON_FILE_PATH | (optional) location of json file containing city data in container |
+| APPLICATION_PORT | (number) application port for web service |
 
 ## Running the app
 
