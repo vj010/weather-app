@@ -1,28 +1,30 @@
 import { HttpModule, Module } from '@nestjs/common';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { NestMysql2Module } from 'mysql2-nestjs';
+import { DataSource } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { mySqlConfig } from './config/mysql.config';
 import { UtilsModule } from './utils/utils.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: mySqlConfig.host,
-      port: mySqlConfig.port,
-      username: mySqlConfig.username,
-      password: mySqlConfig.password,
-      entities: [__dirname + '../**/*.entity{.ts,.js}'],
-      database: mySqlConfig.database,
-      synchronize: false,
-    }),
-    NestMysql2Module.register({
-      host: mySqlConfig.host,
-      port: mySqlConfig.port,
-      user: mySqlConfig.username,
-      password: mySqlConfig.password,
+    ConfigModule.forRoot({ cache: true }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get<string>('MYSQL_HOST'),
+        username: configService.get<string>('MYSQL_USER'),
+        password: configService.get<string>('MYSQL_PASS'),
+        database: configService.get<string>('MYSQL_DB'),
+        port: configService.get<number>('MYSQL_PORT'),
+        entities: ['dist/**/*.entity{.ts,.js}'],
+      }),
+      dataSourceFactory: async (options) => {
+        const dataSource = await new DataSource(options).initialize();
+        return dataSource;
+      },
     }),
     UtilsModule,
     HttpModule,
