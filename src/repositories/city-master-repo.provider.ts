@@ -1,4 +1,4 @@
-import { CityMaster } from 'src/entities/city-master.entity';
+import { CityMaster } from '../entities/city-master.entity';
 import { DataSource, Repository } from 'typeorm';
 
 const getCityMasterRepository = (
