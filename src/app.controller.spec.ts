@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import * as request from 'supertest';
 import { AppModule } from './app.module';
 import { AppService } from './app.service';
-import { CityMaster } from './entities/city-master.entity';
+import { CityMaster } from '../src/entities/city-master.entity';
 import { ResponseErrors } from './types/errors.enum';
 describe('AppController tests', () => {
   let app: INestApplication;

@@ -5,6 +5,7 @@ import { DataSource } from 'typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UtilsModule } from './utils/utils.module';
+import { RepositoryModule } from './repository/repository.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { UtilsModule } from './utils/utils.module';
     }),
     UtilsModule,
     HttpModule,
+    RepositoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

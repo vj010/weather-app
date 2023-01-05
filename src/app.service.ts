@@ -1,36 +1,24 @@
-import {
-  HttpException,
-  HttpService,
-  HttpStatus,
-  Injectable,
-} from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
-import { CityMaster } from './entities/city-master.entity';
-import getCityMasterRepository from './repositories/city-master-repo.provider';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { CityMasterRepositoryInterface } from './repositories/city-master-repo.interface';
 import { ResponseErrors } from './types/errors.enum';
-import { UtilsService } from './utils/utils.service';
 
 @Injectable()
 export class AppService {
-  private cityMasterRepository: Repository<CityMaster> =
-    getCityMasterRepository(this.dataSource);
   constructor(
-    private dataSource: DataSource,
-    private utilsService: UtilsService,
-    private httpService: HttpService,
-  ) {}
+    @Inject('CityMasterRepo')
+    private cityMasterRepository: CityMasterRepositoryInterface, // private utilsService: UtilsService,
+  ) // private httpService: HttpService,
+  {}
 
   async getCityById(cityId: number): Promise<any> {
-    const city = await this.cityMasterRepository.findOne({
-      where: { id: cityId },
-    });
+    const city = await this.cityMasterRepository.getCityById(cityId);
     if (!city) {
       throw new HttpException(
         { code: ResponseErrors.NOT_FOUND, message: 'not found' },
         HttpStatus.NOT_FOUND,
       );
     }
-    return null;
+    return city;
   }
 
   // async getWeatherByCityId(cityId: number): Promise<WeatherInfo> {
