@@ -1,9 +1,9 @@
-import { INestApplication } from '@nestjs/common';
+import { HttpException, HttpStatus } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { AppService } from './app.service';
 import { CityMaster } from './entities/city-master.entity';
-import { RepositoryModule } from './repository/repository.module';
+import { ResponseErrors } from './types/errors.enum';
 describe('AppService tests', () => {
   let appService: AppService;
 
@@ -15,7 +15,14 @@ describe('AppService tests', () => {
         {
           provide: 'CityMasterRepo',
           useFactory: () => {
-            return { getCityById: (id: number) => new CityMaster() };
+            return {
+              getCityById: (id: number) => {
+                if (!id) {
+                  return null;
+                }
+                return new CityMaster();
+              },
+            };
           },
         },
       ],
@@ -29,7 +36,21 @@ describe('AppService tests', () => {
     expect(appService).toBeDefined();
   });
 
-  it('getCityById cityFound', async () => {
+  it('getCityById city Found', async () => {
     expect(await appService.getCityById(2)).toBeInstanceOf(CityMaster);
+  });
+
+  it('getCityById city not found', async () => {
+    try {
+      await appService.getCityById(0);
+    } catch (error) {
+      expect(error).toBeInstanceOf(HttpException);
+      expect(error).toMatchObject(
+        new HttpException(
+          { code: ResponseErrors.NOT_FOUND, message: 'not found' },
+          HttpStatus.NOT_FOUND,
+        ),
+      );
+    }
   });
 });

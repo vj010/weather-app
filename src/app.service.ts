@@ -6,9 +6,8 @@ import { ResponseErrors } from './types/errors.enum';
 export class AppService {
   constructor(
     @Inject('CityMasterRepo')
-    private cityMasterRepository: CityMasterRepositoryInterface, // private utilsService: UtilsService,
-  ) // private httpService: HttpService,
-  {}
+    private cityMasterRepository: CityMasterRepositoryInterface, // private utilsService: UtilsService, // private httpService: HttpService,
+  ) {}
 
   async getCityById(cityId: number): Promise<any> {
     const city = await this.cityMasterRepository.getCityById(cityId);

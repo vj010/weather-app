@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { CityMasterRepository } from './city-master-repo.provider';
-import { CityMasterRepositoryInterface } from '../repositories/city-master-repo.interface';
 @Module({
   providers: [
     {
