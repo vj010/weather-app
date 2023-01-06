@@ -3,7 +3,9 @@ import { ConfigModule } from '@nestjs/config';
 import { Test } from '@nestjs/testing';
 import { AppService } from './app.service';
 import { CityMaster } from './entities/city-master.entity';
+import { CityInfo } from './types/city-info-interface';
 import { ResponseErrors } from './types/errors.enum';
+import { UtilsService } from './utils/utils.service';
 describe('AppService tests', () => {
   let appService: AppService;
 
@@ -12,6 +14,7 @@ describe('AppService tests', () => {
       imports: [ConfigModule],
       providers: [
         AppService,
+        UtilsService,
         {
           provide: 'CityMasterRepo',
           useFactory: () => {
@@ -20,7 +23,12 @@ describe('AppService tests', () => {
                 if (!id) {
                   return null;
                 }
-                return new CityMaster();
+                const cityMaster = new CityMaster();
+                cityMaster.id = id;
+                cityMaster.name = 'test';
+                cityMaster.latutitude = 23.7;
+                cityMaster.longitude = 25.5;
+                return cityMaster;
               },
             };
           },
@@ -37,7 +45,14 @@ describe('AppService tests', () => {
   });
 
   it('getCityById city Found', async () => {
-    expect(await appService.getCityById(2)).toBeInstanceOf(CityMaster);
+    const cityInfo: CityInfo = await appService.getCityById(2);
+    expect(cityInfo).toBeDefined();
+    expect(cityInfo).toMatchObject({
+      name: 'test',
+      id: 2,
+      lat: 23.7,
+      lng: 25.5,
+    });
   });
 
   it('getCityById city not found', async () => {
