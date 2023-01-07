@@ -2,6 +2,7 @@ import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { CityMasterRepositoryInterface } from './repositories/city-master-repo.interface';
 import { CityInfo } from './types/city-info-interface';
 import { ResponseErrors } from './types/errors.enum';
+import { WeatherInfo } from './types/weather-data.interface';
 import { UtilsService } from './utils/utils.service';
 
 @Injectable()
@@ -9,7 +10,7 @@ export class AppService {
   constructor(
     @Inject('CityMasterRepo')
     private cityMasterRepository: CityMasterRepositoryInterface,
-    private utilsService: UtilsService, // private httpService: HttpService,
+    private utilsService: UtilsService,
   ) {}
 
   async getCityById(cityId: number): Promise<CityInfo> {
@@ -23,25 +24,24 @@ export class AppService {
     return this.utilsService.getCityInfoObject(city);
   }
 
-  // async getWeatherByCityId(cityId: number): Promise<WeatherInfo> {
-  //   const city: CityInfo = await this.getCityById(cityId);
-  //   const requestUrl = `${weatherApiUrl}?lat=${city.lat}&lon=${city.lng}&appid=${weatherApiKey}`;
-  //   const weatherData = await this.httpService.get(requestUrl).toPromise();
+  async getWeatherByCityId(cityId: number): Promise<WeatherInfo> {
+    const city: CityInfo = await this.getCityById(cityId);
+    const weatherData = await this.utilsService.getWeatherData(city);
 
-  //   return {
-  //     type: weatherData?.data?.weather[0]?.main,
-  //     type_description: weatherData?.data?.weather[0]?.description,
-  //     sunrise: new Date(weatherData?.data?.sys?.sunrise * 1000).toISOString(),
-  //     sunset: new Date(weatherData?.data?.sys?.sunset * 1000).toISOString(),
-  //     temp: weatherData?.data?.main.temp,
-  //     temp_min: weatherData?.data?.main.temp_min,
-  //     temp_max: weatherData?.data?.main.temp_max,
-  //     pressure: weatherData?.data?.main.pressure,
-  //     humidity: weatherData?.data?.main.humidity,
-  //     clouds_percent: weatherData?.data?.cloud?.all,
-  //     wind_speed: weatherData?.data?.wind?.speed,
-  //   };
-  // }
+    return {
+      type: weatherData?.data?.weather[0]?.main,
+      type_description: weatherData?.data?.weather[0]?.description,
+      sunrise: new Date(weatherData?.data?.sys?.sunrise * 1000).toISOString(),
+      sunset: new Date(weatherData?.data?.sys?.sunset * 1000).toISOString(),
+      temp: weatherData?.data?.main.temp,
+      temp_min: weatherData?.data?.main.temp_min,
+      temp_max: weatherData?.data?.main.temp_max,
+      pressure: weatherData?.data?.main.pressure,
+      humidity: weatherData?.data?.main.humidity,
+      clouds_percent: weatherData?.data?.clouds?.all,
+      wind_speed: weatherData?.data?.wind?.speed,
+    };
+  }
 
   // async getCityListByCordinates(lat: number, lng: number): Promise<CityInfo[]> {
   //   const query = `select ID, NAME, LATITUDE,LONGITUDE
