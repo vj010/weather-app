@@ -1,7 +1,7 @@
-import { Controller, Get, Param, ParseIntPipe, Query } from '@nestjs/common';
+import { Controller, Get, Param, ParseIntPipe } from '@nestjs/common';
 import { AppService } from './app.service';
-import { ParseNumber } from './pipes/parse-number.pipe';
 import { CityInfo } from './types/city-info-interface';
+import { WeatherInfo } from './types/weather-data.interface';
 
 @Controller('/cities')
 export class AppController {
@@ -15,15 +15,17 @@ export class AppController {
   }
 
   @Get('/:cityId/weather')
-  async getWeatherByCityId(@Param('cityId', ParseIntPipe) cityId: number) {
+  async getWeatherByCityId(
+    @Param('cityId', ParseIntPipe) cityId: number,
+  ): Promise<WeatherInfo> {
     return this.appService.getWeatherByCityId(cityId);
   }
 
-  @Get('/')
-  async getCityListByCordinates(
-    @Query('lat', ParseNumber) lat: number,
-    @Query('lng', ParseNumber) lng: number,
-  ): Promise<CityInfo[]> {
-    return this.appService.getCityListByCordinates(lat, lng);
-  }
+  // @Get('/')
+  // async getCityListByCordinates(
+  //   @Query('lat', ParseNumber) lat: number,
+  //   @Query('lng', ParseNumber) lng: number,
+  // ): Promise<CityInfo[]> {
+  //   return this.appService.getCityListByCordinates(lat, lng);
+  // }
 }

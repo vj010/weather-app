@@ -1,9 +1,12 @@
-export const mySqlConfig = {
-  host: process.env.MYSQL_HOST,
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+
+export const mySqlConfig: TypeOrmModuleOptions = {
+  host: process.env.MYSQL_HOST as string,
   port: parseInt(process.env.MYSQL_PORT),
-  username: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASS,
-  database: process.env.MYSQL_DB,
+  username: process.env.MYSQL_USER as string,
+  password: process.env.MYSQL_PASS as string,
+  database: process.env.MYSQL_DB as string,
+  type: 'mysql',
   entities: ['dist/**/*.entity{.ts,.js}'],
 };
 
