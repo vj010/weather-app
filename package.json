@@ -63,6 +63,6 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
-    "preset":"ts-jest"
+    "preset": "ts-jest"
   }
 }
